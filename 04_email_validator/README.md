@@ -1,19 +1,23 @@
 # Email Validator
 
-## Problem
-Validate if an email address is correctly formatted using regex.  
+## Description
+A console-based program that validates whether an email address
+follows standard formatting rules using regular expressions.
 
-## Input
-- Email address string
+## Features
+- Validates common email formats
+- Rejects invalid and malformed addresses
+- Clean and readable implementation
 
-## Output
-- Valid / Invalid
+## Notes
+- This validator checks format only, not domain existence.
 
-## Example
-Input: test@example.com
-Output: Valid
+## Languages
+- Python
+- Java
+- C++
 
-## Why Useful
-- Input validation for signup forms
-- Used in web and mobile apps
-
+## Concepts Used
+- Regular expressions
+- String processing
+- User input validation
