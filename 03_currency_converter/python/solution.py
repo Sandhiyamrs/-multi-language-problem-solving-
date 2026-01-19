@@ -1,21 +1,31 @@
-import requests
+RATES = {
+    "USD": 1.0,
+    "EUR": 0.92,
+    "INR": 83.0,
+    "GBP": 0.79,
+    "JPY": 144.0
+}
 
-def get_rate(from_currency, to_currency):
+def convert(amount, from_currency, to_currency):
+    return (amount / RATES[from_currency]) * RATES[to_currency]
+
+def main():
+    print("Available currencies:", ", ".join(RATES.keys()))
+
     try:
-        url = f"https://api.exchangerate.host/convert?from={from_currency}&to={to_currency}"
-        response = requests.get(url).json()
-        return response['info']['rate']
-    except Exception as e:
-        print("Error fetching rate:", e)
-        return None
+        amount = float(input("Enter amount: "))
+        from_currency = input("From currency: ").upper()
+        to_currency = input("To currency: ").upper()
 
-amount = float(input("Amount: "))
-from_curr = input("From (USD/EUR/INR/...): ").upper()
-to_curr = input("To (USD/EUR/INR/...): ").upper()
+        if from_currency not in RATES or to_currency not in RATES:
+            print("Unsupported currency.")
+            return
 
-rate = get_rate(from_curr, to_curr)
-if rate:
-    print(f"{amount} {from_curr} = {amount*rate:.2f} {to_curr}")
-else:
-    print("Conversion failed.")
+        result = convert(amount, from_currency, to_currency)
+        print(f"{amount:.2f} {from_currency} = {result:.2f} {to_currency}")
 
+    except ValueError:
+        print("Invalid amount entered.")
+
+if __name__ == "__main__":
+    main()
