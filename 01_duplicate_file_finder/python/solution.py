@@ -1,40 +1,37 @@
 import os
 import hashlib
+from collections import defaultdict
 
-def md5_hash(path):
+def get_file_hash(file_path, chunk_size=4096):
     hasher = hashlib.md5()
-    with open(path, 'rb') as f:
-        hasher.update(f.read())
+    with open(file_path, 'rb') as file:
+        while chunk := file.read(chunk_size):
+            hasher.update(chunk)
     return hasher.hexdigest()
 
-def find_duplicates(folder_path):
-    seen = {}
-    duplicates = []
+def find_duplicates(directory):
+    hashes = defaultdict(list)
 
-    for root, _, files in os.walk(folder_path):
-        for file in files:
-            full_path = os.path.join(root, file)
+    for root, _, files in os.walk(directory):
+        for name in files:
+            path = os.path.join(root, name)
             try:
-                file_hash = md5_hash(full_path)
-            except Exception:
-                continue
-            if file_hash in seen:
-                duplicates.append((full_path, seen[file_hash], os.path.getsize(full_path)))
-            else:
-                seen[file_hash] = full_path
+                file_hash = get_file_hash(path)
+                hashes[file_hash].append(path)
+            except (PermissionError, OSError):
+                pass
 
-    return duplicates
+    return {h: paths for h, paths in hashes.items() if len(paths) > 1}
 
-folder = input("Enter folder path: ")
-dups = find_duplicates(folder)
+if __name__ == "__main__":
+    folder = input("Enter directory path: ")
+    duplicates = find_duplicates(folder)
 
-if dups:
-    total_size = sum([s for _,_,s in dups])
-    print("\nDuplicate files found:")
-    for f1, f2, _ in dups:
-        print(f"{f1} == {f2}")
-    print(f"Total duplicates: {len(dups)}")
-    print(f"Total space wasted: {total_size/1024:.2f} KB")
-else:
-    print("No duplicates found.")
-
+    if not duplicates:
+        print("No duplicate files found.")
+    else:
+        print("Duplicate files:")
+        for files in duplicates.values():
+            for file in files:
+                print(file)
+            print("-" * 40)
