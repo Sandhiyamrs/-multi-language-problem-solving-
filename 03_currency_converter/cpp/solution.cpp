@@ -1,19 +1,42 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <unordered_map>
+#include <iomanip>
+
 using namespace std;
 
-// Note: C++ cannot directly fetch live API without extra libraries.
-// We'll use a static example for demonstration.
-
 int main() {
-    double amount; string from, to;
-    cout << "Amount: "; cin >> amount;
-    cout << "From (USD/EUR/INR/...): "; cin >> from;
-    cout << "To (USD/EUR/INR/...): "; cin >> to;
+    unordered_map<string, double> rates = {
+        {"USD", 1.0},
+        {"EUR", 0.92},
+        {"INR", 83.0},
+        {"GBP", 0.79},
+        {"JPY", 144.0}
+    };
 
-    map<string,double> rates = {{"USD",1},{"EUR",0.92},{"INR",83},{"GBP",0.80}};
-    if(rates.count(from) && rates.count(to)){
-        double converted = amount / rates[from] * rates[to];
-        cout << amount << " " << from << " = " << fixed << setprecision(2) << converted << " " << to << endl;
-    } else cout << "Currency not supported.\n";
+    double amount;
+    string from, to;
+
+    cout << "Available currencies: ";
+    for (const auto& r : rates)
+        cout << r.first << " ";
+    cout << endl;
+
+    cout << "Enter amount: ";
+    cin >> amount;
+
+    cout << "From currency: ";
+    cin >> from;
+    cout << "To currency: ";
+    cin >> to;
+
+    if (!rates.count(from) || !rates.count(to)) {
+        cout << "Unsupported currency.\n";
+        return 0;
+    }
+
+    double result = (amount / rates[from]) * rates[to];
+    cout << fixed << setprecision(2);
+    cout << amount << " " << from << " = " << result << " " << to << endl;
+
     return 0;
 }
