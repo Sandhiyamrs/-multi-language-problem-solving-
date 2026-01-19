@@ -4,48 +4,55 @@ import java.security.*;
 import java.util.*;
 
 public class Solution {
-    public static String md5Hash(File file) throws Exception {
+
+    private static String getFileHash(Path path) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] data = Files.readAllBytes(file.toPath());
-        md.update(data);
+        try (InputStream is = Files.newInputStream(path)) {
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                md.update(buffer, 0, read);
+            }
+        }
         byte[] hashBytes = md.digest();
         StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) sb.append(String.format("%02x", b));
+        for (byte b : hashBytes)
+            sb.append(String.format("%02x", b));
         return sb.toString();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter folder path: ");
-        String folderPath = sc.nextLine();
-        File folder = new File(folderPath);
+        System.out.print("Enter directory path: ");
+        Path dir = Paths.get(sc.nextLine());
 
-        Map<String, String> seen = new HashMap<>();
-        List<String[]> duplicates = new ArrayList<>();
-        long totalSize = 0;
+        Map<String, List<Path>> fileMap = new HashMap<>();
 
-        for (File file : folder.listFiles()) {
-            if (file.isFile()) {
-                try {
-                    String hash = md5Hash(file);
-                    if (seen.containsKey(hash)) {
-                        duplicates.add(new String[]{file.getAbsolutePath(), seen.get(hash)});
-                        totalSize += file.length();
-                    } else {
-                        seen.put(hash, file.getAbsolutePath());
-                    }
-                } catch (Exception e) { continue; }
+        try {
+            Files.walk(dir)
+                 .filter(Files::isRegularFile)
+                 .forEach(path -> {
+                     try {
+                         String hash = getFileHash(path);
+                         fileMap.computeIfAbsent(hash, k -> new ArrayList<>()).add(path);
+                     } catch (Exception ignored) {}
+                 });
+
+            boolean found = false;
+            for (List<Path> paths : fileMap.values()) {
+                if (paths.size() > 1) {
+                    found = true;
+                    System.out.println("Duplicate group:");
+                    paths.forEach(System.out::println);
+                    System.out.println("-------------------------");
+                }
             }
-        }
 
-        if (!duplicates.isEmpty()) {
-            System.out.println("Duplicate files found:");
-            for (String[] pair : duplicates) System.out.println(pair[0] + " == " + pair[1]);
-            System.out.println("Total duplicates: " + duplicates.size());
-            System.out.println("Total space wasted: " + totalSize/1024 + " KB");
-        } else {
-            System.out.println("No duplicates found.");
+            if (!found)
+                System.out.println("No duplicate files found.");
+
+        } catch (IOException e) {
+            System.out.println("Invalid directory.");
         }
     }
 }
-
