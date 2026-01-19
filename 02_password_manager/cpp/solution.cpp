@@ -1,48 +1,61 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <unordered_map>
+#include <openssl/sha.h>
+#include <sstream>
+#include <iomanip>
+
 using namespace std;
 
-string generatePassword(int length){
-    if(length < 8) return "";
-    string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    string lower = "abcdefghijklmnopqrstuvwxyz";
-    string digits = "0123456789";
-    string symbols = "!@#$%^&*()_+-={}[]|:;<>,.?/";
-    string all = upper + lower + digits + symbols;
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dis(0, all.size()-1);
-    string pwd;
-    while(true){
-        pwd = "";
-        for(int i=0;i<length;i++) pwd += all[dis(gen)];
-        if(any_of(pwd.begin(),pwd.end(),::islower) &&
-           any_of(pwd.begin(),pwd.end(),::isupper) &&
-           any_of(pwd.begin(),pwd.end(),::isdigit) &&
-           any_of(pwd.begin(),pwd.end(), [&](char c){ return symbols.find(c)!=string::npos; }))
-           break;
-    }
-    return pwd;
+unordered_map<string, string> store;
+
+string hashPassword(const string& password) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char*)password.c_str(), password.size(), hash);
+
+    stringstream ss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+        ss << hex << setw(2) << setfill('0') << (int)hash[i];
+    return ss.str();
 }
 
-int main(){
-    int num, length;
-    cout << "How many passwords to generate? ";
-    cin >> num;
-    cout << "Password length: ";
-    cin >> length;
-    vector<string> passwords;
-    for(int i=0;i<num;i++) passwords.push_back(generatePassword(length));
-    for(int i=0;i<num;i++) cout << i+1 << ": " << passwords[i] << endl;
+void addPassword() {
+    string service, password;
+    cout << "Service name: ";
+    cin >> service;
 
-    char save;
-    cout << "Save passwords to file? (y/n): ";
-    cin >> save;
-    if(save=='y'){
-        ofstream out("passwords.txt");
-        for(auto &p: passwords) out << p << endl;
-        out.close();
-        cout << "Saved to passwords.txt" << endl;
+    if (store.count(service)) {
+        cout << "Service already exists.\n";
+        return;
+    }
+
+    cout << "Password: ";
+    cin >> password;
+    store[service] = hashPassword(password);
+    cout << "Password stored successfully.\n";
+}
+
+void retrievePassword() {
+    string service;
+    cout << "Service name: ";
+    cin >> service;
+
+    if (!store.count(service)) {
+        cout << "Service not found.\n";
+        return;
+    }
+    cout << "Stored hash: " << store[service] << endl;
+}
+
+int main() {
+    while (true) {
+        cout << "\n1. Add Password\n2. Retrieve Password\n3. Exit\nChoice: ";
+        int choice;
+        cin >> choice;
+
+        if (choice == 1) addPassword();
+        else if (choice == 2) retrievePassword();
+        else if (choice == 3) break;
+        else cout << "Invalid choice\n";
     }
     return 0;
 }
-
