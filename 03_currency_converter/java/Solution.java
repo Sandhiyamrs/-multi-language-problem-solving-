@@ -1,27 +1,44 @@
-import java.io.*;
-import java.net.*;
-import org.json.JSONObject;
-import java.util.Scanner;
+import java.util.*;
 
 public class Solution {
-    public static void main(String[] args) throws Exception {
+
+    private static final Map<String, Double> RATES = Map.of(
+        "USD", 1.0,
+        "EUR", 0.92,
+        "INR", 83.0,
+        "GBP", 0.79,
+        "JPY", 144.0
+    );
+
+    private static double convert(double amount, String from, String to) {
+        return (amount / RATES.get(from)) * RATES.get(to);
+    }
+
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Amount: "); double amt = sc.nextDouble();
-        System.out.print("From (USD/EUR/INR/...): "); String from = sc.next().toUpperCase();
-        System.out.print("To (USD/EUR/INR/...): "); String to = sc.next().toUpperCase();
 
-        String urlStr = "https://api.exchangerate.host/convert?from="+from+"&to="+to;
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("GET");
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder(); String line;
-        while((line = br.readLine())!=null) sb.append(line);
-        br.close();
+        System.out.println("Available currencies: " + RATES.keySet());
+        try {
+            System.out.print("Enter amount: ");
+            double amount = Double.parseDouble(sc.nextLine());
 
-        JSONObject obj = new JSONObject(sb.toString());
-        double rate = obj.getJSONObject("info").getDouble("rate");
-        System.out.printf("%.2f %s = %.2f %s%n", amt, from, amt*rate, to);
+            System.out.print("From currency: ");
+            String from = sc.nextLine().toUpperCase();
+
+            System.out.print("To currency: ");
+            String to = sc.nextLine().toUpperCase();
+
+            if (!RATES.containsKey(from) || !RATES.containsKey(to)) {
+                System.out.println("Unsupported currency.");
+                return;
+            }
+
+            double result = convert(amount, from, to);
+            System.out.printf("%.2f %s = %.2f %s%n", amount, from, result, to);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid amount entered.");
+        }
     }
 }
 
