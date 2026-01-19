@@ -1,19 +1,25 @@
 # Expense Tracker
 
-## Problem
-Track daily expenses with categories, display summary, and export optionally.
+## Description
+A console-based expense tracker that allows users to record daily
+expenses, categorize them, and view total spending.
 
-## Input
-- Expense amount
-- Category (Food, Travel, etc.)
-- Optionally description
+## Features
+- Add expenses with category and amount
+- View total expenses
+- Display expenses by category
+- Simple and intuitive CLI interface
 
-## Output
-- List of expenses
-- Total spent per category
-- Optional CSV export
+## Limitations
+- Data is stored in memory (not persistent)
 
-## Why Useful
-- Personal finance tracking
-- Budgeting apps
+## Languages
+- Python
+- Java
+- C++
 
+## Concepts Used
+- Lists / Vectors
+- Maps / Dictionaries
+- Loops
+- User input handling
