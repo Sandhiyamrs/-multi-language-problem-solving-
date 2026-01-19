@@ -1,37 +1,72 @@
 import java.util.*;
-import java.io.*;
-
-class Expense {
-    double amount; String category, desc;
-    Expense(double a,String c,String d){ amount=a; category=c; desc=d;}
-}
 
 public class Solution {
-    public static void main(String[] args) throws IOException{
-        Scanner sc = new Scanner(System.in);
-        List<Expense> expenses = new ArrayList<>();
-        while(true){
-            System.out.print("Enter amount (0 to stop): ");
-            double amt = sc.nextDouble(); sc.nextLine();
-            if(amt==0) break;
-            System.out.print("Category: "); String cat = sc.nextLine();
-            System.out.print("Description: "); String desc = sc.nextLine();
-            expenses.add(new Expense(amt,cat,desc));
+
+    private static final List<Expense> expenses = new ArrayList<>();
+
+    private static class Expense {
+        double amount;
+        String category;
+
+        Expense(double amount, String category) {
+            this.amount = amount;
+            this.category = category;
         }
+    }
 
-        Map<String, Double> summary = new HashMap<>();
-        for(Expense e: expenses) summary.put(e.category, summary.getOrDefault(e.category,0.0)+e.amount);
-        System.out.println("\nExpense Summary:");
-        for(String k: summary.keySet()) System.out.println(k+": "+summary.get(k));
+    private static void addExpense(double amount, String category) {
+        expenses.add(new Expense(amount, category));
+        System.out.println("Expense added.");
+    }
 
-        System.out.print("Export to CSV? (y/n): ");
-        char save = sc.next().charAt(0);
-        if(save=='y'){
-            PrintWriter pw = new PrintWriter("expenses.csv");
-            pw.println("amount,category,desc");
-            for(Expense e: expenses) pw.println(e.amount+","+e.category+","+e.desc);
-            pw.close();
-            System.out.println("Saved to expenses.csv");
+    private static void showTotal() {
+        double total = expenses.stream().mapToDouble(e -> e.amount).sum();
+        System.out.printf("Total expenses: %.2f%n", total);
+    }
+
+    private static void showByCategory() {
+        Map<String, Double> map = new HashMap<>();
+        for (Expense e : expenses)
+            map.put(e.category, map.getOrDefault(e.category, 0.0) + e.amount);
+
+        map.forEach((k, v) ->
+                System.out.printf("%s: %.2f%n", k, v));
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n1. Add Expense");
+            System.out.println("2. View Total");
+            System.out.println("3. View by Category");
+            System.out.println("4. Exit");
+            System.out.print("Choice: ");
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case "1":
+                    try {
+                        System.out.print("Amount: ");
+                        double amount = Double.parseDouble(sc.nextLine());
+                        System.out.print("Category: ");
+                        String category = sc.nextLine();
+                        addExpense(amount, category);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid amount.");
+                    }
+                    break;
+                case "2":
+                    showTotal();
+                    break;
+                case "3":
+                    showByCategory();
+                    break;
+                case "4":
+                    return;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
     }
 }
