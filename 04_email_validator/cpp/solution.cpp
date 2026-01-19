@@ -1,14 +1,20 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
 #include <regex>
 
-int main(){
+using namespace std;
+
+int main() {
     string email;
-    cout << "Enter email: ";
+    cout << "Enter email address: ";
     cin >> email;
-    regex pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$");
-    if(regex_match(email, pattern)) cout << "Valid Email\n";
-    else cout << "Invalid Email\n";
+
+    regex pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+    if (regex_match(email, pattern))
+        cout << "Valid email address.\n";
+    else
+        cout << "Invalid email address.\n";
+
     return 0;
 }
 
