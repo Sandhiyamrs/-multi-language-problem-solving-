@@ -1,48 +1,67 @@
 import java.util.*;
-import java.io.*;
+import java.security.MessageDigest;
 
 public class Solution {
-    public static String generatePassword(int length) {
-        if(length < 8) return null;
-        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lower = "abcdefghijklmnopqrstuvwxyz";
-        String digits = "0123456789";
-        String symbols = "!@#$%^&*()_+-={}[]|:;<>,.?/";
-        String all = upper + lower + digits + symbols;
-        Random r = new Random();
-        String pwd;
-        while(true){
+
+    private static final Map<String, String> store = new HashMap<>();
+
+    private static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();
-            for(int i=0;i<length;i++)
-                sb.append(all.charAt(r.nextInt(all.length())));
-            pwd = sb.toString();
-            if(pwd.chars().anyMatch(Character::isLowerCase) &&
-               pwd.chars().anyMatch(Character::isUpperCase) &&
-               pwd.chars().anyMatch(Character::isDigit) &&
-               pwd.chars().anyMatch(c -> symbols.indexOf(c)>=0))
-                break;
+            for (byte b : bytes)
+                sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Hashing failed");
         }
-        return pwd;
     }
 
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Number of passwords to generate: ");
-        int num = sc.nextInt();
-        System.out.print("Password length: ");
-        int length = sc.nextInt();
-        List<String> passwords = new ArrayList<>();
-        for(int i=0;i<num;i++) passwords.add(generatePassword(length));
-        for(int i=0;i<passwords.size();i++) System.out.println((i+1)+": "+passwords.get(i));
+    private static void addPassword(String service, String password) {
+        if (store.containsKey(service)) {
+            System.out.println("Service already exists.");
+            return;
+        }
+        store.put(service, hashPassword(password));
+        System.out.println("Password stored successfully.");
+    }
 
-        System.out.print("Save passwords to file? (y/n): ");
-        char choice = sc.next().charAt(0);
-        if(choice == 'y'){
-            PrintWriter pw = new PrintWriter("passwords.txt");
-            for(String p: passwords) pw.println(p);
-            pw.close();
-            System.out.println("Saved to passwords.txt");
+    private static void retrievePassword(String service) {
+        if (!store.containsKey(service)) {
+            System.out.println("Service not found.");
+            return;
+        }
+        System.out.println("Stored hash: " + store.get(service));
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n1. Add Password");
+            System.out.println("2. Retrieve Password");
+            System.out.println("3. Exit");
+            System.out.print("Choice: ");
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.print("Service name: ");
+                    String service = sc.nextLine();
+                    System.out.print("Password: ");
+                    String password = sc.nextLine();
+                    addPassword(service, password);
+                    break;
+                case "2":
+                    System.out.print("Service name: ");
+                    retrievePassword(sc.nextLine());
+                    break;
+                case "3":
+                    return;
+                default:
+                    System.out.println("Invalid choice");
+            }
         }
     }
 }
-
