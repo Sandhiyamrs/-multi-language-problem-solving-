@@ -1,33 +1,32 @@
-# Strong Password Generator & Manager
+# Password Manager
 
-## Problem
-Generate strong passwords and store them securely.  
-Features:
-- Generate multiple strong passwords
-- Optionally store passwords in a file
-- Copy password to clipboard (Python)
+## Description
+A simple console-based password manager that allows users to
+store and retrieve passwords securely during program execution.
 
-## Input
-- Number of passwords
-- Password length
+Passwords are stored using hashing to avoid plain-text storage.
 
-## Output
-- Display generated passwords
-- Optionally save to file
+## Features
+- Add new credentials
+- Retrieve stored credentials
+- Prevent duplicate entries
+- Password hashing for security
 
-## Constraints
-- Password must include: uppercase, lowercase, digits, symbols
-- Length ≥ 8
+## Limitations
+- Data is stored in memory (not persistent)
+- Intended for learning purposes only
 
-## Example
-Input: 3 passwords, length 12
-Output:
-1: G7f$k2mPq9@!
-2: A8b*L3xZr1#%
-3: ...
+## Languages
+- Python
+- Java
+- C++
 
-## Why This Problem Is Useful
-- Secure password creation
+## Concepts Used
+- Hashing
+- Maps / Dictionaries
+- User input handling
+- Conditional logic
+
 - Essential for cybersecurity
 - Useful for real-world apps and account management
 
