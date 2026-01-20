@@ -1,26 +1,19 @@
 # Weather API Fetcher
 
-## Problem
-Fetch live weather data for any city:
-- Temperature
-- Humidity
-- Wind speed
-- Sunrise/Sunset
+## Problem Statement
+Create a simple program that fetches and displays current weather
+information for a given city using a public weather API.
 
-## Input
-- City name
+## Requirements
+- Take city name as input
+- Fetch current temperature
+- Display weather description
 
-## Output
-- Weather details nicely formatted
+## Notes
+- Use OpenWeatherMap API (or similar)
+- API key should be placed inside the code for practice
 
-## Example
-Input: London
-Output:
-Temperature: 15°C
-Humidity: 75%
-Wind: 10 km/h
-Sunrise: 06:30
-Sunset: 18:45
-
-## Why Useful
-- Useful for weather apps, travel apps, dashboards
+## Concepts Used
+- HTTP requests
+- JSON parsing
+- User input
