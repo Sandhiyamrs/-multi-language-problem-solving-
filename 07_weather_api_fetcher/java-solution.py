@@ -1,26 +1,41 @@
-import java.io.*;
 import java.net.*;
-import org.json.JSONObject;
-import java.util.Scanner;
+import java.io.*;
+import org.json.*;
 
-public class Solution {
+public class WeatherFetcher {
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter city: ");
-        String city = sc.nextLine();
-        String urlStr = "http://wttr.in/" + city + "?format=j1";
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("GET");
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder(); String line;
-        while((line=br.readLine())!=null) sb.append(line);
-        br.close();
 
-        JSONObject obj = new JSONObject(sb.toString());
-        JSONObject current = obj.getJSONArray("current_condition").getJSONObject(0);
-        System.out.println("Temperature: " + current.getString("temp_C")+"°C");
-        System.out.println("Humidity: " + current.getString("humidity")+"%");
-        System.out.println("Wind: " + current.getString("windspeedKmph")+" km/h");
+        String apiKey = "YOUR_API_KEY";
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter city name: ");
+        String city = br.readLine();
+
+        String urlStr =
+            "https://api.openweathermap.org/data/2.5/weather?q=" +
+            city + "&appid=" + apiKey + "&units=metric";
+
+        URL url = new URL(urlStr);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        JSONObject obj = new JSONObject(response.toString());
+        double temp = obj.getJSONObject("main").getDouble("temp");
+        String desc = obj.getJSONArray("weather")
+                         .getJSONObject(0)
+                         .getString("description");
+
+        System.out.println("Temperature: " + temp + "°C");
+        System.out.println("Weather: " + desc);
     }
 }
