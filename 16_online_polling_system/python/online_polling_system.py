@@ -1,20 +1,37 @@
-candidates = ["Alice", "Bob", "Charlie"]
-votes = [0] * len(candidates)
+poll = {
+    "Option A": 0,
+    "Option B": 0,
+    "Option C": 0
+}
 
 while True:
-    print("Candidates:")
-    for i, name in enumerate(candidates):
-        print(f"{i+1}. {name}")
-    choice = input("Enter candidate number (or 'q' to quit): ")
-    if choice.lower() == 'q':
+    print("\n1. Vote")
+    print("2. View Results")
+    print("3. Exit")
+
+    choice = input("Choice: ")
+
+    if choice == "1":
+        print("\nOptions:")
+        for i, option in enumerate(poll.keys(), start=1):
+            print(i, option)
+
+        vote = int(input("Select option number: "))
+        options = list(poll.keys())
+
+        if 1 <= vote <= len(options):
+            poll[options[vote - 1]] += 1
+            print("Vote recorded.")
+        else:
+            print("Invalid option.")
+
+    elif choice == "2":
+        print("\nResults:")
+        for option, count in poll.items():
+            print(option, ":", count)
+
+    elif choice == "3":
         break
-    if choice.isdigit() and 1 <= int(choice) <= len(candidates):
-        votes[int(choice)-1] += 1
+
     else:
-        print("Invalid choice")
-
-max_votes = max(votes)
-winners = [candidates[i] for i, v in enumerate(votes) if v == max_votes]
-
-print("Vote tally:", dict(zip(candidates, votes)))
-print("Winner(s):", ", ".join(winners))
+        print("Invalid choice.")
