@@ -1,28 +1,57 @@
 import java.util.*;
 
-public class OnlinePollingSystem {
+public class Online_pollingSystem {
+
     public static void main(String[] args) {
-        String[] candidates = {"Alice", "Bob", "Charlie"};
-        int[] votes = new int[candidates.length];
+
+        Map<String, Integer> poll = new LinkedHashMap<>();
+        poll.put("Option A", 0);
+        poll.put("Option B", 0);
+        poll.put("Option C", 0);
+
         Scanner sc = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Candidates:");
-            for (int i = 0; i < candidates.length; i++) {
-                System.out.println((i+1) + ". " + candidates[i]);
-            }
-            System.out.print("Enter candidate number (or 0 to quit): ");
-            int choice = sc.nextInt();
-            if (choice == 0) break;
-            if (choice >= 1 && choice <= candidates.length) votes[choice-1]++;
-            else System.out.println("Invalid choice");
-        }
+            System.out.println("\n1. Vote");
+            System.out.println("2. View Results");
+            System.out.println("3. Exit");
+            System.out.print("Choice: ");
 
-        int maxVotes = Arrays.stream(votes).max().getAsInt();
-        System.out.print("Winner(s): ");
-        for (int i = 0; i < votes.length; i++) {
-            if (votes[i] == maxVotes) System.out.print(candidates[i] + " ");
+            String choice = sc.nextLine();
+
+            if (choice.equals("1")) {
+                int i = 1;
+                for (String option : poll.keySet()) {
+                    System.out.println(i + ". " + option);
+                    i++;
+                }
+
+                System.out.print("Select option number: ");
+                int vote = Integer.parseInt(sc.nextLine());
+                List<String> options = new ArrayList<>(poll.keySet());
+
+                if (vote >= 1 && vote <= options.size()) {
+                    String selected = options.get(vote - 1);
+                    poll.put(selected, poll.get(selected) + 1);
+                    System.out.println("Vote recorded.");
+                } else {
+                    System.out.println("Invalid option.");
+                }
+
+            } else if (choice.equals("2")) {
+                System.out.println("\nResults:");
+                for (Map.Entry<String, Integer> entry : poll.entrySet()) {
+                    System.out.println(entry.getKey() + " : " + entry.getValue());
+                }
+
+            } else if (choice.equals("3")) {
+                sc.close();
+                return;
+
+            } else {
+                System.out.println("Invalid choice.");
+            }
         }
-        System.out.println();
     }
 }
+
