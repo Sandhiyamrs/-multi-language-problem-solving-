@@ -1,11 +1,20 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+
 using namespace std;
 
-// For C++, live API fetching requires extra libraries (like cURL).
-// We'll use a static example for demonstration.
+int main() {
+    string apiKey = "YOUR_API_KEY";
+    string city;
 
-int main(){
-    string city; cout << "Enter city: "; cin >> city;
-    cout << "Temperature: 15°C\nHumidity: 70%\nWind: 10 km/h\nFeels like: 14°C\n";
+    cout << "Enter city name: ";
+    cin >> city;
+
+    string command =
+        "curl \"https://api.openweathermap.org/data/2.5/weather?q=" +
+        city + "&appid=" + apiKey + "&units=metric\"";
+
+    system(command.c_str());
+
     return 0;
 }
