@@ -1,21 +1,35 @@
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 int main() {
+    const string USERNAME = "admin";
+    const string PASSWORD = "1234";
+    const int MAX_ATTEMPTS = 3;
+
     int attempts = 0;
-    string pwd;
+    string user, pass;
 
-    while (attempts < 3) {
-        cout << "Enter password: ";
-        cin >> pwd;
+    while (attempts < MAX_ATTEMPTS) {
+        cout << "Username: ";
+        cin >> user;
 
-        if (pwd == "admin123") {
-            cout << "Login successful\n";
-            return 0;
+        cout << "Password: ";
+        cin >> pass;
+
+        if (user == USERNAME && pass == PASSWORD) {
+            cout << "Login successful.\n";
+            break;
         } else {
             attempts++;
-            cout << "Wrong password\n";
+            cout << "Invalid credentials.\n";
         }
     }
-    cout << "Account locked\n";
+
+    if (attempts == MAX_ATTEMPTS) {
+        cout << "Account locked due to too many failed attempts.\n";
+    }
+
+    return 0;
 }
