@@ -1,15 +1,38 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+
 using namespace std;
 
 int main() {
-    ifstream file("app.log");
+    string filename;
+    cout << "Enter log file name: ";
+    cin >> filename;
+
+    ifstream file(filename);
+    if (!file) {
+        cout << "Log file not found.\n";
+        return 0;
+    }
+
+    int error = 0, warning = 0, info = 0;
     string line;
-    int count = 0;
 
     while (getline(file, line)) {
         if (line.find("ERROR") != string::npos)
-            count++;
+            error++;
+        else if (line.find("WARNING") != string::npos)
+            warning++;
+        else if (line.find("INFO") != string::npos)
+            info++;
     }
-    cout << "Error count: " << count << endl;
+
+    file.close();
+
+    cout << "\nLog Summary:\n";
+    cout << "ERROR: " << error << endl;
+    cout << "WARNING: " << warning << endl;
+    cout << "INFO: " << info << endl;
+
+    return 0;
 }
