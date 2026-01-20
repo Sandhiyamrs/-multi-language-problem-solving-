@@ -1,17 +1,28 @@
-filename = input("Enter filename: ")
-mode = input("Write(w) / Read(r): ").lower()
+text = []
 
-if mode == 'w':
-    with open(filename, 'w') as f:
-        print("Enter text (type 'END' on a new line to finish):")
-        while True:
-            line = input()
-            if line == "END":
-                break
-            f.write(line + "\n")
-elif mode == 'r':
-    try:
-        with open(filename) as f:
-            print(f.read())
-    except FileNotFoundError:
-        print("File not found")
+while True:
+    print("\n1. Add Text")
+    print("2. View Text")
+    print("3. Clear Text")
+    print("4. Exit")
+
+    choice = input("Choice: ")
+
+    if choice == "1":
+        line = input("Enter text: ")
+        text.append(line)
+
+    elif choice == "2":
+        print("\nCurrent Text:")
+        for line in text:
+            print(line)
+
+    elif choice == "3":
+        text.clear()
+        print("Text cleared.")
+
+    elif choice == "4":
+        break
+
+    else:
+        print("Invalid choice.")
