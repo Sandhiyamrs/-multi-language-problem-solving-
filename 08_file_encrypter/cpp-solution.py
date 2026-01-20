@@ -1,22 +1,28 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
 #include <fstream>
 
-void encrypt_decrypt(string path, int key){
-    ifstream in(path, ios::binary);
-    vector<char> data((istreambuf_iterator<char>(in)), {});
-    in.close();
-    for(char &c: data) c ^= key;
-    ofstream out(path+".enc", ios::binary);
-    out.write(data.data(), data.size());
-    out.close();
-    cout << "File processed!\n";
-}
+using namespace std;
 
-int main(){
-    string file; int key;
-    cout << "File path: "; cin >> file;
-    cout << "Key: "; cin >> key;
-    encrypt_decrypt(file,key);
+int main() {
+    int key = 123;
+    string inputFile, outputFile;
+
+    cout << "Input file: ";
+    cin >> inputFile;
+    cout << "Output file: ";
+    cin >> outputFile;
+
+    ifstream in(inputFile, ios::binary);
+    ofstream out(outputFile, ios::binary);
+
+    char ch;
+    while (in.get(ch)) {
+        out.put(ch ^ key);
+    }
+
+    in.close();
+    out.close();
+
+    cout << "File encrypted successfully.\n";
     return 0;
 }
