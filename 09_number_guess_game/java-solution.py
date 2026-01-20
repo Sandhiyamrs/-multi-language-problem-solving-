@@ -1,17 +1,28 @@
-import java.util.*;
+import java.util.Random;
+import java.util.Scanner;
 
-public class Solution {
-    public static void main(String[] args){
-        Random r = new Random();
-        int num = r.nextInt(100)+1;
+public class NumberGuessGame {
+    public static void main(String[] args) {
+
+        Random rand = new Random();
+        int number = rand.nextInt(100) + 1;
+
         Scanner sc = new Scanner(System.in);
-        int attempts=0, guess;
-        do{
-            System.out.print("Guess number (1-100): ");
-            guess = sc.nextInt(); attempts++;
-            if(guess<num) System.out.println("Higher!");
-            else if(guess>num) System.out.println("Lower!");
-        } while(guess!=num);
-        System.out.println("Correct! Attempts: "+attempts);
+        System.out.println("Guess a number between 1 and 100");
+
+        while (true) {
+            System.out.print("Your guess: ");
+            int guess = sc.nextInt();
+
+            if (guess < number) {
+                System.out.println("Too Low");
+            } else if (guess > number) {
+                System.out.println("Too High");
+            } else {
+                System.out.println("Correct! You guessed the number.");
+                break;
+            }
+        }
+        sc.close();
     }
 }
