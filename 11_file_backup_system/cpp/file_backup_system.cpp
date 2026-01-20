@@ -1,24 +1,33 @@
 #include <iostream>
-#include <filesystem>
+#include <fstream>
 
-namespace fs = std::filesystem;
+using namespace std;
 
 int main() {
-    fs::path source = "source";
-    fs::path backup = "backup";
+    string source, backup;
 
-    if (!fs::exists(source)) {
-        std::cout << "Source folder not found\n";
+    cout << "Enter source file: ";
+    cin >> source;
+
+    cout << "Enter backup file: ";
+    cin >> backup;
+
+    ifstream in(source, ios::binary);
+    ofstream out(backup, ios::binary);
+
+    if (!in) {
+        cout << "Source file not found.\n";
         return 0;
     }
 
-    fs::create_directories(backup);
-
-    for (auto& file : fs::directory_iterator(source)) {
-        if (fs::is_regular_file(file)) {
-            fs::copy(file.path(), backup / file.path().filename(),
-                     fs::copy_options::overwrite_existing);
-            std::cout << "Backed up: " << file.path().filename() << "\n";
-        }
+    char ch;
+    while (in.get(ch)) {
+        out.put(ch);
     }
+
+    in.close();
+    out.close();
+
+    cout << "Backup created successfully.\n";
+    return 0;
 }
