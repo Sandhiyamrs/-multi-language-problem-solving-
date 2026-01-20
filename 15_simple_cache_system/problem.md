@@ -1,30 +1,17 @@
 # Simple Cache System
 
 ## Problem Statement
-Implement a simple in-memory key-value cache system.
+Create a simple in-memory cache system that stores
+key-value pairs and allows retrieval.
 
 ## Requirements
-- Allow users to insert key-value pairs.
-- Store data temporarily during program execution.
-- Allow multiple entries.
-- Exit when the user enters a termination keyword.
-
-## Input
-- Key
-- Value
-
-## Output
-- Updated cache contents after each insertion
-
-## Constraints
-- Cache is not persistent (data lost on exit).
+- Add data to cache
+- Retrieve data from cache
+- Display cache contents
+- Exit the program
 
 ## Concepts Used
-- Hash maps / dictionaries
+- Dictionaries / Maps
+- Conditionals
 - Loops
-- User input handling
-
-## Supported Languages
-- Java
-- Python
-- C++
+- Basic data storage
