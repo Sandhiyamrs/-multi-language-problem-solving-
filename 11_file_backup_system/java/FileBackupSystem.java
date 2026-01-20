@@ -1,25 +1,27 @@
 import java.io.*;
-import java.nio.file.*;
 
 public class FileBackupSystem {
-    public static void main(String[] args) throws IOException {
-        Path source = Paths.get("source");
-        Path backup = Paths.get("backup");
+    public static void main(String[] args) throws Exception {
 
-        if (!Files.exists(source)) {
-            System.out.println("Source folder not found");
-            return;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Enter source file: ");
+        String source = br.readLine();
+
+        System.out.print("Enter backup file: ");
+        String backup = br.readLine();
+
+        FileInputStream fis = new FileInputStream(source);
+        FileOutputStream fos = new FileOutputStream(backup);
+
+        int b;
+        while ((b = fis.read()) != -1) {
+            fos.write(b);
         }
 
-        Files.createDirectories(backup);
+        fis.close();
+        fos.close();
 
-        DirectoryStream<Path> files = Files.newDirectoryStream(source);
-        for (Path file : files) {
-            if (Files.isRegularFile(file)) {
-                Files.copy(file, backup.resolve(file.getFileName()),
-                        StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Backed up: " + file.getFileName());
-            }
-        }
+        System.out.println("Backup created successfully.");
     }
 }
