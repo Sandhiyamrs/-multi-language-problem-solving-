@@ -1,15 +1,30 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
 using namespace std;
 
-int main(){
+int main() {
     srand(time(0));
-    int num = rand()%100+1, guess, attempts=0;
-    do{
-        cout << "Guess number (1-100): "; cin >> guess;
-        attempts++;
-        if(guess<num) cout << "Higher!\n";
-        else if(guess>num) cout << "Lower!\n";
-    } while(guess!=num);
-    cout << "Correct! Attempts: " << attempts << endl;
+    int number = rand() % 100 + 1;
+    int guess;
+
+    cout << "Guess a number between 1 and 100\n";
+
+    while (true) {
+        cout << "Your guess: ";
+        cin >> guess;
+
+        if (guess < number) {
+            cout << "Too Low\n";
+        }
+        else if (guess > number) {
+            cout << "Too High\n";
+        }
+        else {
+            cout << "Correct! You guessed the number.\n";
+            break;
+        }
+    }
     return 0;
 }
