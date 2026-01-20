@@ -1,12 +1,16 @@
-# Number Guessing Game
+# Number Guess Game
 
-## Problem
-Classic number guessing game:
-- Computer selects random number
-- Player guesses
-- Give hints higher/lower
-- Track number of attempts
+## Description
+A simple command-line game where the computer chooses a random number
+and the user tries to guess it.
 
-## Why Useful
-- Practice random numbers and loops
-- Interactive CLI game
+## Rules
+- Number range: 1 to 100
+- Program gives hints (Too High / Too Low)
+- Game ends when the correct number is guessed
+
+## Concepts Used
+- Random number generation
+- Loops
+- Conditionals
+- User input
