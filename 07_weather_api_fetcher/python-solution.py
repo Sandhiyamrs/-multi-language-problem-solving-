@@ -1,13 +1,17 @@
 import requests
 
-city = input("Enter city: ")
-try:
-    url = f"http://wttr.in/{city}?format=j1"
-    data = requests.get(url).json()
-    current = data['current_condition'][0]
-    print(f"Temperature: {current['temp_C']}°C")
-    print(f"Humidity: {current['humidity']}%")
-    print(f"Wind: {current['windspeedKmph']} km/h")
-    print(f"Feels like: {current['FeelsLikeC']}°C")
-except Exception as e:
-    print("Error fetching weather:", e)
+API_KEY = "YOUR_API_KEY"
+city = input("Enter city name: ")
+
+url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+response = requests.get(url)
+
+data = response.json()
+
+if response.status_code == 200:
+    temp = data["main"]["temp"]
+    desc = data["weather"][0]["description"]
+    print(f"Temperature: {temp}°C")
+    print(f"Weather: {desc}")
+else:
+    print("City not found")
