@@ -1,14 +1,23 @@
-from collections import Counter
-import re
+text = input("Enter text:\n")
 
-text = input("Enter text: ")
-words = re.findall(r'\w+', text.lower())
-freq = Counter(words)
-keywords = [w for w,_ in freq.most_common(5)]
-print("Top keywords:", keywords)
+sentences = text.split(".")
+word_freq = {}
 
-sentences = re.split(r'(?<=[.!?]) +', text)
-sent_scores = [(s,sum(freq[w.lower()] for w in re.findall(r'\w+',s))) for s in sentences]
-summary = sorted(sent_scores, key=lambda x:x[1], reverse=True)[:3]
+for sentence in sentences:
+    for word in sentence.lower().split():
+        word_freq[word] = word_freq.get(word, 0) + 1
+
+sentence_scores = {}
+
+for sentence in sentences:
+    score = 0
+    for word in sentence.lower().split():
+        score += word_freq.get(word, 0)
+    sentence_scores[sentence] = score
+
+summary = sorted(sentence_scores, key=sentence_scores.get, reverse=True)[:2]
+
 print("\nSummary:")
-for s,_ in summary: print(s)
+for s in summary:
+    if s.strip():
+        print(s.strip() + ".")
