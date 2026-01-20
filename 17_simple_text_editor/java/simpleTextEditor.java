@@ -1,31 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class SimpleTextEditor {
-    public static void main(String[] args) throws IOException {
+public class simpleTextEditor {
+    public static void main(String[] args) {
+
+        ArrayList<String> text = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter filename: ");
-        String filename = sc.nextLine();
-        System.out.print("Write(w) / Read(r): ");
-        String mode = sc.nextLine();
 
-        if (mode.equalsIgnoreCase("w")) {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-            System.out.println("Enter text (type 'END' to finish):");
-            while (true) {
-                String line = sc.nextLine();
-                if (line.equals("END")) break;
-                bw.write(line);
-                bw.newLine();
-            }
-            bw.close();
-        } else if (mode.equalsIgnoreCase("r")) {
-            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-                String line;
-                while ((line = br.readLine()) != null) System.out.println(line);
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found");
+        while (true) {
+            System.out.println("\n1. Add Text");
+            System.out.println("2. View Text");
+            System.out.println("3. Clear Text");
+            System.out.println("4. Exit");
+            System.out.print("Choice: ");
+
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.print("Enter text: ");
+                    text.add(sc.nextLine());
+                    break;
+
+                case "2":
+                    System.out.println("\nCurrent Text:");
+                    for (String line : text)
+                        System.out.println(line);
+                    break;
+
+                case "3":
+                    text.clear();
+                    System.out.println("Text cleared.");
+                    break;
+
+                case "4":
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
             }
         }
     }
 }
+
