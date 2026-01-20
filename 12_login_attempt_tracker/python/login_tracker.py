@@ -1,15 +1,19 @@
-MAX_ATTEMPTS = 3
+USERNAME = "admin"
+PASSWORD = "1234"
 
 attempts = 0
+MAX_ATTEMPTS = 3
 
 while attempts < MAX_ATTEMPTS:
-    pwd = input("Enter password: ")
-    if pwd == "admin123":
-        print("Login successful")
+    user = input("Username: ")
+    pwd = input("Password: ")
+
+    if user == USERNAME and pwd == PASSWORD:
+        print("Login successful.")
         break
     else:
         attempts += 1
-        print("Incorrect password")
+        print("Invalid credentials.")
 
 if attempts == MAX_ATTEMPTS:
-    print("Account locked")
+    print("Account locked due to too many failed attempts.")
