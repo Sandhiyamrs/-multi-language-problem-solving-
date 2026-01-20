@@ -1,30 +1,16 @@
 # Student Grade Manager
 
 ## Problem Statement
-Build a program that calculates the average marks of a student and assigns a grade.
+Create a simple system to manage student grades
+and calculate average scores.
 
 ## Requirements
-- Accept marks for multiple subjects.
-- Calculate the average score.
-- Assign grades based on the average:
-  - A: ≥ 90
-  - B: ≥ 75
-  - C: ≥ 60
-  - Fail: < 60
-
-## Input
-- List of integer marks
-
-## Output
-- Average marks
-- Final grade
+- Add student name and grade
+- Display all students and grades
+- Calculate class average
 
 ## Concepts Used
-- Arrays / Lists
-- Arithmetic operations
-- Conditional logic
-
-## Supported Languages
-- Java
-- Python
-- C++
+- Lists / Arrays
+- Loops
+- Basic calculations
+- User input
