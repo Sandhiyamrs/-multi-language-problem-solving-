@@ -1,11 +1,14 @@
-def encrypt_decrypt(file_path, key):
-    with open(file_path, 'rb') as f:
-        data = f.read()
-    result = bytes([b ^ key for b in data])
-    with open(file_path + ".enc", 'wb') as f:
-        f.write(result)
-    print("File processed!")
+key = 123
 
-file = input("File path: ")
-k = int(input("Enter numeric key: "))
-encrypt_decrypt(file, k)
+input_file = input("Input file: ")
+output_file = input("Output file: ")
+
+with open(input_file, "rb") as f:
+    data = f.read()
+
+encrypted = bytes([b ^ key for b in data])
+
+with open(output_file, "wb") as f:
+    f.write(encrypted)
+
+print("File encrypted successfully.")
