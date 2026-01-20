@@ -1,16 +1,15 @@
-# File Encrypter/Decrypter
+# File Encrypter
 
-## Problem
-Encrypt and decrypt files using a simple XOR cipher:
-- Multiple file support
-- Secure key
-- Save encrypted files
+## Description
+A simple file encryption program using XOR logic.
+The same program can be used to encrypt and decrypt a file.
 
-## Input
-- File path
-- Key
-- Encrypt/Decrypt option
+## How It Works
+- Reads file content
+- Applies XOR operation using a key
+- Writes encrypted output to a new file
 
-## Why Useful
-- Basic file security
-- Learn encryption fundamentals
+## Concepts Used
+- File handling
+- XOR operation
+- Basic loops
