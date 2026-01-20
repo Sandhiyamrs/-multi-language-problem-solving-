@@ -1,43 +1,52 @@
-#include <bits/stdc++.h>
-using namespace std;
-#include <regex>
+#include <iostream>
+#include <sstream>
+#include <map>
+#include <vector>
+#include <algorithm>
 
-int main(){
-    cout << "Enter text: ";
-    string text, line;
+using namespace std;
+
+int main() {
+    string text;
+    cout << "Enter text:\n";
     getline(cin, text);
 
-    regex word_regex("\\w+");
-    map<string,int> freq;
-    auto words_begin = sregex_iterator(text.begin(), text.end(), word_regex);
-    auto words_end = sregex_iterator();
-    for(auto i=words_begin;i!=words_end;++i){
-        string w=i->str();
-        transform(w.begin(), w.end(), w.begin(), ::tolower);
-        freq[w]++;
+    stringstream ss(text);
+    vector<string> sentences;
+    string temp;
+
+    while (getline(ss, temp, '.')) {
+        sentences.push_back(temp);
     }
 
-    vector<pair<string,int>> sorted_words(freq.begin(), freq.end());
-    sort(sorted_words.begin(), sorted_words.end(), [](auto &a, auto &b){ return b.second<a.second?false:b.second<a.second?true:b.second>b.second; });
-    cout << "Top keywords: ";
-    for(int i=0;i<min(5,(int)sorted_words.size());i++) cout << sorted_words[i].first << " ";
-    cout << endl;
+    map<string, int> wordFreq;
 
-    regex sentence_regex("([^.!?]+[.!?])");
-    vector<pair<string,int>> sentences;
-    auto s_begin = sregex_iterator(text.begin(), text.end(), sentence_regex);
-    for(auto i=s_begin; i!=sregex_iterator(); ++i){
-        string s = i->str();
-        int score=0;
-        auto w_begin = sregex_iterator(s.begin(), s.end(), word_regex);
-        for(auto w_i=w_begin; w_i!=sregex_iterator(); ++w_i){
-            string w=w_i->str(); transform(w.begin(), w.end(), w.begin(), ::tolower);
-            score+=freq[w];
+    for (auto& s : sentences) {
+        stringstream ws(s);
+        string word;
+        while (ws >> word) {
+            wordFreq[word]++;
         }
-        sentences.push_back({s,score});
     }
-    sort(sentences.begin(), sentences.end(), [](auto &a, auto &b){ return b.second<a.second; });
+
+    vector<pair<int, string>> scores;
+
+    for (auto& s : sentences) {
+        int score = 0;
+        stringstream ws(s);
+        string word;
+        while (ws >> word) {
+            score += wordFreq[word];
+        }
+        scores.push_back({score, s});
+    }
+
+    sort(scores.rbegin(), scores.rend());
+
     cout << "\nSummary:\n";
-    for(int i=0;i<min(3,(int)sentences.size());i++) cout << sentences[i].first << endl;
+    for (int i = 0; i < min(2, (int)scores.size()); i++) {
+        cout << scores[i].second << ".\n";
+    }
+
     return 0;
 }
