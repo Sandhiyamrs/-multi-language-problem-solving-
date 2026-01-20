@@ -1,28 +1,18 @@
 # Log File Analyzer
 
 ## Problem Statement
-Create a program that analyzes a log file and counts the number of error entries.
+Create a simple program that analyzes a log file
+and counts different log levels.
 
 ## Requirements
-- Read a text-based log file.
-- Count lines containing the keyword "ERROR".
-- Display the total error count.
-
-## Input
-- Log file (e.g., app.log)
-
-## Output
-- Total number of error entries
-
-## Assumptions
-- Log file exists in the same directory as the program.
+- Read a log file line by line
+- Count occurrences of:
+  - ERROR
+  - WARNING
+  - INFO
+- Display the summary
 
 ## Concepts Used
 - File reading
-- String searching
+- String search
 - Counters
-
-## Supported Languages
-- Java
-- Python
-- C++
