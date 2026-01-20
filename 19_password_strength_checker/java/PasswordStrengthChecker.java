@@ -1,21 +1,33 @@
-import java.util.regex.*;
 import java.util.Scanner;
 
 public class PasswordStrengthChecker {
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter password: ");
-        String pwd = sc.nextLine();
-        String strength = "Weak";
+        String password = sc.nextLine();
 
-        if (pwd.length() >= 8 &&
-            Pattern.compile("[A-Z]").matcher(pwd).find() &&
-            Pattern.compile("[a-z]").matcher(pwd).find() &&
-            Pattern.compile("[0-9]").matcher(pwd).find() &&
-            Pattern.compile("[@#$%^&+=]").matcher(pwd).find())
-            strength = "Strong";
-        else if (pwd.length() >= 6) strength = "Medium";
+        boolean hasUpper = false, hasLower = false, hasDigit = false;
 
-        System.out.println("Password strength: " + strength);
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isDigit(c)) hasDigit = true;
+        }
+
+        int score = 0;
+        if (hasUpper) score++;
+        if (hasLower) score++;
+        if (hasDigit) score++;
+        if (password.length() >= 8) score++;
+
+        if (score <= 2)
+            System.out.println("Weak Password");
+        else if (score == 3)
+            System.out.println("Medium Password");
+        else
+            System.out.println("Strong Password");
+
+        sc.close();
     }
 }
