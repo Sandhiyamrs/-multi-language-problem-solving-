@@ -1,28 +1,38 @@
 import java.util.*;
-import java.util.regex.*;
 
-public class Solution {
-    public static void main(String[] args){
+public class TextSummarizer {
+    public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter text:");
         String text = sc.nextLine();
-        Map<String,Integer> freq = new HashMap<>();
-        for(String w:text.toLowerCase().split("\\W+")) freq.put(w,freq.getOrDefault(w,0)+1);
-        List<Map.Entry<String,Integer>> list = new ArrayList<>(freq.entrySet());
-        list.sort((a,b)->b.getValue()-a.getValue());
-        System.out.print("Top keywords: ");
-        for(int i=0;i<Math.min(5,list.size());i++) System.out.print(list.get(i).getKey()+" ");
-        System.out.println();
 
-        String[] sentences = text.split("(?<=[.!?])\\s+");
-        List<String[]> scored = new ArrayList<>();
-        for(String s: sentences){
-            int score=0;
-            for(String w: s.toLowerCase().split("\\W+")) score+=freq.getOrDefault(w,0);
-            scored.add(new String[]{s,String.valueOf(score)});
+        String[] sentences = text.split("\\.");
+        Map<String, Integer> wordFreq = new HashMap<>();
+
+        for (String sentence : sentences) {
+            for (String word : sentence.toLowerCase().split(" ")) {
+                wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+            }
         }
-        scored.sort((a,b)->Integer.parseInt(b[1])-Integer.parseInt(a[1]));
+
+        Map<String, Integer> sentenceScore = new HashMap<>();
+
+        for (String sentence : sentences) {
+            int score = 0;
+            for (String word : sentence.toLowerCase().split(" ")) {
+                score += wordFreq.getOrDefault(word, 0);
+            }
+            sentenceScore.put(sentence, score);
+        }
+
+        List<String> summary = new ArrayList<>(sentenceScore.keySet());
+        summary.sort((a, b) -> sentenceScore.get(b) - sentenceScore.get(a));
+
         System.out.println("\nSummary:");
-        for(int i=0;i<Math.min(3,scored.size());i++) System.out.println(scored.get(i)[0]);
+        for (int i = 0; i < Math.min(2, summary.size()); i++) {
+            System.out.println(summary.get(i).trim() + ".");
+        }
+        sc.close();
     }
 }
